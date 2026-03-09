@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+<title>Realistic Book</title>
+
+<style>
+
+
+.scene{
+perspective:3000px;
+}
+
+.background{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-image:url("background4.png");
+background-size:120%;
+background-position:0% center;
+background-repeat:no-repeat;
+z-index:-1;
+}
+
+
+.book{
+position:relative;
+width:90vw;
+height:60vw;
+max-width:1200px;
+max-height:800px;
+transform-style:preserve-3d;
+}
+
+/* страница */
+
+.page{
+position:absolute;
+width:50%;
+height:100%;
+z-index:10;
+top:0;
+right:0;
+transform-origin:left center;
+transform-style:preserve-3d;
+transition:transform 1.6s;
+cursor:pointer;
+overflow:visible;
+
+/* изгиб */
+box-shadow:
+-8px 0 20px rgba(0,0,0,0.25),
+inset -6px 0 12px rgba(0,0,0,0.2);
+border-radius:3px;
+}
+/* переворот */
+
+.page.flipped{
+transform:rotateY(-180deg);
+box-shadow:
+8px 0 20px rgba(0,0,0,0.25),
+inset 6px 0 12px rgba(0,0,0,0.25);
+}
+/* стороны страницы */
+
+.side{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+background-image:url("pageA.png");
+background-size:cover;
+background-position:center;
+backface-visibility:hidden;
+overflow:visible;
+}
+/* задняя сторона */
+
+.side.back{
+transform:rotateY(180deg);
+}
+
+/* картинки */
+
+.side img{
+position:absolute;
+top:0;
+left:0;
+width:146%;
+height:103%;
+transform: translate(-17%, -0%);
+object-fit:contain;
+}
+
+
+.side::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(
+to right,
+rgba(0,0,0,0.15),
+transparent 40%
+);
+pointer-events:none;
+}
+
+/* номер страницы */
+
+.page-number{
+position:absolute;
+bottom:10px;
+width:100%;
+text-align:center;
+font-size:18px;
+color:#3b2a17;
+}
+
+/* обложка */
+
+.cover{
+overflow:hidden;
+}
+
+.cover img{
+position:absolute;
+top:0;
+left:0;
+width:165%;
+height:107%;
+transform: translate(-20%, -2%);
+object-fit:contain;
+}
+
+/* корешок книги */
+
+.spine{
+position:absolute;
+left:50%;
+top:0;
+width:120px;
+height:100%;
+transform:translateX(-50%);
+z-index:0;
+pointer-events:none;
+}
+
+
+.spine img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+/**/
+
+.book-shadow{
+position:absolute;
+width:100%;
+max-width:1200px;
+height:160px;
+bottom:-90px;
+left:0;
+background:radial-gradient(ellipse at center,
+rgba(0,0,0,0.55) 0%,
+rgba(0,0,0,0.35) 40%,
+rgba(0,0,0,0.1) 65%,
+transparent 80%);
+filter:blur(35px);
+pointer-events:none;
+}
+
+
+
+@media (max-width: 768px){
+
+.book{
+width:95vw;
+height:65vw;
+}
+
+.page-number{
+font-size:14px;
+}
+
+}
+
+/* запрет выделения текста */
+body{
+user-select:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+}
+
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+/* запрет перетаскивания картинок */
+img{
+pointer-events:none;
+-webkit-user-drag:none;
+user-drag:none;
+}
+
+
+</style>
+</head>
+
+
+<audio id="pageSound" src="pageflip1.mp3"></audio>
+
+
+<body>
+<div class="background"></div>
+<div class="scene">
+
+
+
+
+<div class="book">
+
+<div class="spine">
+<img src="spine.png">
+</div>
+
+
+<!-- cover -->
+<div class="page">
+<div class="side cover">
+<img src="cover.png">
+</div>
+<div class="side back"></div>
+</div>
+
+<!-- page 0 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">-</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">1</div>
+</div>
+
+</div>
+
+<!-- page 1 -->
+<div class="page">
+
+
+    
+<div class="side">
+<img src="page1.png">
+<div class="page-number">2</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">3</div>
+</div>
+
+</div>
+
+<!-- page 2 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">4</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">5</div>
+</div>
+
+</div>
+
+<!-- page 3 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">6</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">7</div>
+</div>
+
+</div>
+
+<!-- page 4 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">8</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">9</div>
+</div>
+
+</div>
+
+<!-- page 3 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">10</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">11</div>
+</div>
+
+</div>
+
+<!-- page 4 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">12</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">13</div>
+</div>
+
+</div>
+
+<!-- page 3 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">14</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">15</div>
+</div>
+
+</div>
+
+<!-- page 4 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">16</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">17</div>
+</div>
+
+</div>
+
+<!-- page 3 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">18</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">19</div>
+</div>
+
+</div>
+
+<!-- page 4 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">20</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">21</div>
+</div>
+
+</div>
+
+<!-- page 3 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">22</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">23</div>
+</div>
+
+</div>
+
+<!-- page 4 -->
+<div class="page">
+
+<div class="side">
+<img src="page1.png">
+<div class="page-number">24</div>
+</div>
+
+<div class="side back">
+<img src="page2.png">
+<div class="page-number">25</div>
+</div>
+
+</div>
+
+<!-- back cover -->
+<div class="page">
+<div class="side"></div>
+<div class="side cover"></div>
+</div>
+
+<div class="book-shadow"></div>
+
+</div>
+</div>
+
+<script>
+
+const pages = document.querySelectorAll(".page");
+
+const sound = document.getElementById("pageSound");
+
+const spine = document.querySelector(".spine");
+
+let currentPage = 0;
+const maxPage = pages.length - 1;
+
+function updateZ(){
+
+pages.forEach((page,i)=>{
+
+if(i < currentPage){
+page.style.zIndex = 10 + i;
+}else{
+page.style.zIndex = 100 - i;
+}
+
+});
+
+}
+
+updateZ();
+
+pages.forEach((page,i)=>{
+
+page.addEventListener("click",()=>{
+
+if(i === currentPage && currentPage < maxPage){
+
+page.classList.add("flipped");
+
+sound.currentTime = 0;
+sound.play();
+
+if(currentPage === 0){
+setTimeout(()=>{
+spine.classList.add("show");
+},1600);
+}
+
+currentPage++;
+updateZ();
+}
+
+
+else if(i === currentPage - 1){
+
+page.classList.remove("flipped");
+
+sound.currentTime = 0;
+sound.play();
+
+if(currentPage === 1){
+setTimeout(()=>{
+spine.classList.remove("show");
+},150);
+}
+currentPage--;
+updateZ();
+
+}
+
+});
+
+});
+
+
+
+
+/* запрет правого клика */
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+
+/* запрет копирования */
+document.addEventListener("copy", function(e){
+e.preventDefault();
+});
+
+/* запрет выделения */
+document.addEventListener("selectstart", function(e){
+e.preventDefault();
+});
+
+/* запрет горячих клавиш */
+document.addEventListener("keydown", function(e){
+
+if(e.ctrlKey && (
+e.key === "c" || 
+e.key === "u" || 
+e.key === "s" || 
+e.key === "a"
+)){
+e.preventDefault();
+}
+
+});
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
